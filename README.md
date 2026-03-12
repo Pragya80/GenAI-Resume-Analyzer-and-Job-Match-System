@@ -22,7 +22,7 @@ This is an AI-powered web application that analyzes resumes and matches them aga
 - **Resume Upload**: Support for PDF resume uploads
 - **Text Extraction**: Automatic extraction of text from PDF resumes
 - **Skill Extraction**: NLP-based extraction of skills, education, and experience
-- **Job Matching**: Semantic similarity analysis between resume and job description
+- **Job Matching**: Semantic similarity analysis between resume and job description (ensure job description includes specific skills or technologies for accurate matching)
 - **Compatibility Scoring**: Percentage-based job match score
 - **Missing Skills Identification**: Highlights skills required by the job but missing from resume
 - **Improvement Suggestions**: AI-generated recommendations to enhance resume
@@ -68,6 +68,7 @@ This is an AI-powered web application that analyzes resumes and matches them aga
 
 1. **Upload Resume**: Click on the file uploader in the sidebar and select your resume PDF
 2. **Enter Job Description**: Paste the job description text in the text area
+   - Tip: include concrete skills/technologies (e.g. "Python, AWS, Docker") otherwise the skill‑matching sections may remain empty.
 3. **Analyze**: Click the "Analyze Resume" button
 4. **View Results**: Review the extracted information, match score, and suggestions
 

@@ -31,13 +31,14 @@ def match_resume_to_job(resume_text, job_description, resume_skills):
         resume_skills (list): List of skills extracted from resume.
 
     Returns:
-        dict: Dictionary with match score, matching skills, missing skills.
+        dict: Dictionary with match score, matching skills, missing skills, and a flag
+              indicating whether any skills were found in the job description.
     """
     # Calculate overall similarity
     overall_similarity = calculate_similarity(resume_text, job_description)
     match_score = round(overall_similarity * 100, 2)
 
-    # Extract skills from job description (simple keyword matching)
+    # Extract skills from job description
     job_skills = extract_job_skills(job_description)
 
     # Find matching and missing skills
@@ -47,12 +48,14 @@ def match_resume_to_job(resume_text, job_description, resume_skills):
     return {
         'match_score': match_score,
         'matching_skills': matching_skills,
-        'missing_skills': missing_skills
+        'missing_skills': missing_skills,
+        'job_skills_found': bool(job_skills)
     }
 
 def extract_job_skills(job_description):
     """
-    Extract skills from job description using simple keyword matching.
+    Extract skills from a job description. Reuses the same keyword database as the
+    resume extractor, ensuring consistency and better coverage.
 
     Args:
         job_description (str): Job description text.
@@ -60,19 +63,20 @@ def extract_job_skills(job_description):
     Returns:
         list: List of skills mentioned in job description.
     """
-    # This is a simplified version; in a real app, use more sophisticated NLP
-    common_skills = [
-        'python', 'java', 'javascript', 'sql', 'machine learning', 'data analysis',
-        'nlp', 'deep learning', 'tensorflow', 'pytorch', 'pandas', 'numpy',
-        'scikit-learn', 'react', 'node.js', 'aws', 'docker', 'kubernetes'
-    ]
+    # simple approach: leverage the resume skill extractor so we don't duplicate
+    # the skill list.  this will catch any skill from COMMON_SKILLS that appears
+    # in the description.
+    from skill_extractor import extract_skills
 
-    job_skills = []
-    for skill in common_skills:
-        if skill in job_description.lower():
-            job_skills.append(skill)
+    # running extract_skills on the job description text returns any of the
+    # recognized skills.  the extractor already lowercases and does simple
+    # substring matching.
+    skills = extract_skills(job_description)
 
-    return job_skills
+    # if nothing was found and the description is very short, the user likely
+    # entered a generic title (e.g. "SDE").  we leave the list empty so the
+    # calling code can display a warning.
+    return skills
 
 def generate_improvement_suggestions(missing_skills, resume_text):
     """

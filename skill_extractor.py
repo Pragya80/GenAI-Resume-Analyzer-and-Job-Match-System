@@ -4,9 +4,9 @@ import nltk
 
 # Download required NLTK data
 try:
-    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('tokenizers/punkt_tab')
 except LookupError:
-    nltk.download('punkt', quiet=True)
+    nltk.download('punkt_tab', quiet=True)
 
 # Common technical skills database
 COMMON_SKILLS = {
@@ -57,7 +57,7 @@ def extract_skills(text):
     # Check against common skills database
     for category, skill_list in COMMON_SKILLS.items():
         for skill in skill_list:
-            if skill.lower() in text_lower:
+            if skill in text_lower:
                 skills.add(skill)
 
     # Remove duplicates and sort
@@ -74,22 +74,20 @@ def extract_education(text):
     Returns:
         list: List of education details found.
     """
-    education_keywords = ['bachelor', 'master', 'phd', 'degree', 'diploma', 'certificate', 'b.s.', 'm.s.', 'b.a.', 'm.a.']
-    
+    education_keywords = ['bachelor', 'master', 'phd', 'degree', 'diploma', 'certificate']
+
     education_details = []
-    
     try:
         sentences = sent_tokenize(text)
     except:
-        sentences = text.split('.')
+        # Fallback: split by periods if tokenization fails
+        sentences = [s.strip() for s in text.split('.') if s.strip()]
 
     for sentence in sentences:
         sentence_lower = sentence.lower()
         # Check if sentence contains education keywords
         if any(keyword in sentence_lower for keyword in education_keywords):
-            cleaned = sentence.strip()
-            if cleaned and len(cleaned) > 10:
-                education_details.append(cleaned)
+            education_details.append(sentence.strip())
 
     return education_details[:5]  # Return top 5
 
@@ -103,21 +101,19 @@ def extract_experience(text):
     Returns:
         list: List of experience details found.
     """
-    experience_keywords = ['worked', 'experience', 'responsibilities', 'led', 'managed', 'developed', 'implemented', 'designed', 'engineer', 'developer']
-    
+    experience_keywords = ['worked', 'experience', 'responsibilities', 'led', 'managed', 'developed', 'implemented']
+
     experience_details = []
-    
     try:
         sentences = sent_tokenize(text)
     except:
-        sentences = text.split('.')
+        # Fallback: split by periods if tokenization fails
+        sentences = [s.strip() for s in text.split('.') if s.strip()]
 
     for sentence in sentences:
         sentence_lower = sentence.lower()
         # Check if sentence contains experience keywords
         if any(keyword in sentence_lower for keyword in experience_keywords):
-            cleaned = sentence.strip()
-            if cleaned and len(cleaned) > 10:
-                experience_details.append(cleaned)
+            experience_details.append(sentence.strip())
 
     return experience_details[:5]  # Return top 5
