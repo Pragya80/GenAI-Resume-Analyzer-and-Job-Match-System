@@ -121,6 +121,9 @@ After analysis, the system displays:
 - Resume optimization recommendations
 - Multi-language support
 
+## deployment
+- deploy link: https://genai-resume-analyzer-and-job-match-system-lwszcmquxwy6fms242f.streamlit.app/
+
 ## Contributing
 
 Feel free to fork this project and submit pull requests with improvements!
